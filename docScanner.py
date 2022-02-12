@@ -22,9 +22,9 @@ imagen = cv2.imread('img_01.jpeg')
 
 gris = cv2.cvtColor(imagen, cv2.COLOR_BGR2GRAY)
 canny = cv2.Canny(gris, 10,150)
-canny = cv2.dilate(canny, None, iterations=1)
+canny2 = cv2.dilate(canny, None, iterations=1)
 
-cnts= cv2.findContours(canny, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)[0]
+cnts= cv2.findContours(canny2, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)[0]
 cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:1]
 
 for c in cnts:
@@ -44,7 +44,11 @@ for c in cnts:
         pts2 = np.float32([[0,0],[270,0],[0,310],[270,310]])
         M = cv2.getPerspectiveTransform(pts1,pts2)
         dst = cv2.warpPerspective(gris, M, (270,310))
+
+        #se muestran las etapas de captura de caracteres  
         cv2.imshow('dts',dst)
+        cv2.imshow ('canny',canny)
+        cv2.imshow ('canny2',canny2)
 
         texto = pytesseract.image_to_string(dst,lang='spa')
         print ('Texto:',texto)
